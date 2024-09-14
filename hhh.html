@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery with Audio & Download</title>
+    <style>
+        /* Body Styling */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Main Container Styling */
+        .main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+        }
+
+        /* Image Container Styling */
+        .image-container {
+            position: relative;
+            width: 250px;
+            height: 350px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Image Styling */
+        .image-container img {
+            width: 100%;
+            height: 80%;
+            object-fit: cover;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Hover Effects */
+        .image-container:hover img {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Play Button Styling */
+        .play-button {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            padding: 15px;
+            font-size: 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0.8;
+        }
+
+        .play-button:hover {
+            opacity: 1;
+        }
+
+        /* Download Button Styling */
+        .download-button {
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .download-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Animation to Fade-in */
+        .fade-in {
+            opacity: 1 !important;
+            transition: opacity 1s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="body">
+        <div class="main">
+            <!-- Each Image with Play and Download Button -->
+            <div class="image-container">
+                <img src="image/image1.jpeg" alt="Image 1">
+                <button class="play-button" onclick="toggleAudio(0)">▶</button>
+                <button class="download-button" onclick="downloadImageWithAudio(0, 'image/image1.jpeg', 'audio/audio1.mp3')">Download</button>
+            </div>
+
+            <div class="image-container">
+                <img src="image/image2.jpeg" alt="Image 2">
+                <button class="play-button" onclick="toggleAudio(1)">▶</button>
+                <button class="download-button" onclick="downloadImageWithAudio(1, 'image/image2.jpeg', 'audio/audio2.mp3')">Download</button>
+            </div>
+
+            <div class="image-container">
+                <img src="image/image3.jpeg" alt="Image 3">
+                <button class="play-button" onclick="toggleAudio(2)">▶</button>
+                <button class="download-button" onclick="downloadImageWithAudio(2, 'image/image3.jpeg', 'audio/audio3.mp3')">Download</button>
+            </div>
+            <!-- Add more images as needed -->
+        </div>
+    </div>
+
+    <!-- Audio Files (Place your audio files here) -->
+    <audio id="audio0" src="audio/audio1.mp3"></audio>
+    <audio id="audio1" src="audio/na kajre.mp3"></audio>
+    <audio id="audio2" src="audio/kitna payara.mp3"></audio>
+
+    <script>
+        let currentAudio = null; // Store currently playing audio
+        let currentButton = null; // Store currently active play button
+
+        // Function to toggle play/pause
+        function toggleAudio(index) {
+            const audio = document.getElementById(`audio${index}`);
+            const button = document.querySelectorAll('.play-button')[index];
+
+            // If another audio is playing, stop it
+            if (currentAudio && currentAudio !== audio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                if (currentButton) {
+                    currentButton.textContent = '▶'; // Reset button text
+                }
+            }
+
+            // Toggle play/pause for the current audio
+            if (audio.paused) {
+                audio.play();
+                button.textContent = '⏸'; // Change button to pause symbol
+                currentAudio = audio; // Set current audio
+                currentButton = button; // Set current button
+            } else {
+                audio.pause();
+                button.textContent = '▶'; // Change back to play symbol
+                currentAudio = null; // Clear current audio
+                currentButton = null; // Clear current button
+            }
+        }
+
+        // Download both image and audio separately
+        function downloadImageWithAudio(index, imageUrl, audioUrl) {
+            // Trigger the image download
+            const linkImage = document.createElement('a');
+            linkImage.href = imageUrl;
+            linkImage.download = `image${index + 1}.jpeg`;
+            linkImage.click();
+
+            // Trigger the audio download
+            const linkAudio = document.createElement('a');
+            linkAudio.href = audioUrl;
+            linkAudio.download = `audio${index + 1}.mp3`;
+            linkAudio.click();
+        }
+    </script>
+</body>
+</html>
